@@ -1,0 +1,4 @@
+C:\Users\furka\OneDrive\Belgeler\Visual Studio 2010\Projects\Website\muhproje\bin\muhproje.dll
+C:\Users\furka\OneDrive\Belgeler\Visual Studio 2010\Projects\Website\muhproje\bin\muhproje.pdb
+C:\Users\furka\OneDrive\Belgeler\Visual Studio 2010\Projects\Website\muhproje\obj\Debug\muhproje.dll
+C:\Users\furka\OneDrive\Belgeler\Visual Studio 2010\Projects\Website\muhproje\obj\Debug\muhproje.pdb

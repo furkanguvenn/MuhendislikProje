@@ -1,0 +1,119 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="Web.Site" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <title></title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
+
+
+    <script type="text/javascript">
+        function sqlConnect() {
+            var connection = new ActiveXObject("ADODB.Connection");
+
+            var connectionstring = "server=localhost;database=StajProje;user=sa;password=123456;connection timeout=30";
+            connection.Open(connectionstring);
+            var rs = new ActiveXObject("ADODB.Recordset");
+
+            rs.Open("SELECT * FROM vWKisi", connection);
+            rs.MoveFirst
+            while (!rs.eof) {
+                document.write(rs.fields(1));
+                rs.movenext;
+            }
+        
+        rs.close;
+        connection.close;
+        }
+        function kisiGetir() {
+         
+            $.ajax({
+                type: "POST",
+                url: "api/Web/KisiGetir",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    $("#kisiler").dataTable({
+                        destroy: true,
+                        columns: [
+                            { data: "Ad" },
+                            { data: "Soyad" },
+                            { data: "Telefon" },
+                            { data: "Cinsiyet" },
+                            { data: "TCKimlikNo" }
+                        ],
+                        "aaSorting": [],
+                        data: data
+                    });
+                },
+                error: function (errMsg) {
+                    console.log(errMsg);
+                }
+            });
+        }
+
+        function kisiEkle() {
+            var ad = $("#txtAd").val();
+            var soyad = $("#txtSoyad").val();
+            var telefon = $("#txtTelefon").val();
+            var cinsiyet = $("#txtCinsiyet").val();
+            var tcKimlikNo = $("#txtTCKimlikNo").val();
+
+
+            $.ajax({
+                type: "POST",
+                url: "api/Web/KisiEkle",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({ Ad: ad, Soyad: soyad, Telefon: telefon, Cinsiyet: cinsiyet, TCKimlikNo: tcKimlikNo }),
+                dataType: "json",
+                success: function (data) {
+                    alert(data);
+                    kisiGetir();
+                },
+                error: function (errMsg) {
+                    console.log(errMsg);
+                }
+            });
+        }
+
+        function kisiSil() {
+            var tcKimlikNo = $("#txtSilTCKimlikNo").val();
+
+
+            $.ajax({
+                type: "POST",
+                url: "api/Web/KisiSil",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({ TCKimlikNo: tcKimlikNo }),
+                dataType: "json",
+                success: function (data) {
+                    alert(data);
+                    kisiGetir();
+                }
+                error: function (errMsg) {
+                    console.log(errMsg);
+                }
+            });
+        }
+    </script>
+
+        <asp:GridView ID="aaaa" runat="server">
+        </asp:GridView>
+    </form>
+
+
+    </body>
+</html>
